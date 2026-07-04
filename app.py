@@ -1,10 +1,31 @@
 from flask import Flask, render_template, redirect, url_for, request, flash
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
-from models import db, User
-from dotenv import load_dotenv
-import os
 from models import db, User, Note
+from dotenv import load_dotenv
 from textblob import TextBlob
+import os
+
+load_dotenv()
+
+app = Flask(__name__)
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///notes.db'
+
+db.init_app(app)
+
+# Create tables immediately on app load — works with gunicorn AND python app.py
+with app.app_context():
+    db.create_all()
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
 
 def analyze_sentiment(text):
     polarity = TextBlob(text).sentiment.polarity
@@ -15,27 +36,13 @@ def analyze_sentiment(text):
     else:
         return 'neutral'
 
-load_dotenv()
-
-app = Flask(__name__)
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///notes.db'
-
-db.init_app(app)
-
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = 'login'
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
 
 @app.route('/')
 def home():
     if current_user.is_authenticated:
         return redirect(url_for('dashboard'))
     return redirect(url_for('login'))
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -58,6 +65,7 @@ def register():
 
     return render_template('register.html')
 
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -73,11 +81,13 @@ def login():
 
     return render_template('login.html')
 
+
 @app.route('/dashboard')
 @login_required
 def dashboard():
     notes = Note.query.filter_by(user_id=current_user.id).order_by(Note.created_at.desc()).all()
     return render_template('dashboard.html', notes=notes)
+
 
 @app.route('/note/new', methods=['GET', 'POST'])
 @login_required
@@ -97,6 +107,7 @@ def new_note():
         return redirect(url_for('dashboard'))
     return render_template('note_form.html', note=None)
 
+
 @app.route('/note/<int:note_id>/edit', methods=['GET', 'POST'])
 @login_required
 def edit_note(note_id):
@@ -115,6 +126,7 @@ def edit_note(note_id):
 
     return render_template('note_form.html', note=note)
 
+
 @app.route('/note/<int:note_id>/delete', methods=['POST'])
 @login_required
 def delete_note(note_id):
@@ -128,6 +140,7 @@ def delete_note(note_id):
     flash('Note deleted.', 'success')
     return redirect(url_for('dashboard'))
 
+
 @app.route('/logout')
 @login_required
 def logout():
@@ -135,8 +148,7 @@ def logout():
     flash('Logged out successfully.', 'success')
     return redirect(url_for('login'))
 
+
 if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
