@@ -10,15 +10,16 @@
     <nav class="navbar">
         <a href="{{ url_for('home') }}" class="logo">📝 NotesApp</a>
         <div class="nav-links">
-            {% if current_user.is_authenticated %}
-                <span>Hi, {{ current_user.username }}</span>
-                <a href="{{ url_for('dashboard') }}">Dashboard</a>
-                <a href="{{ url_for('logout') }}">Logout</a>
-            {% else %}
-                <a href="{{ url_for('login') }}">Login</a>
-                <a href="{{ url_for('register') }}">Register</a>
-            {% endif %}
-        </div>
+    {% if current_user.is_authenticated %}
+        <span>Hi, {{ current_user.username }}</span>
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    {% else %}
+        <a href="{{ url_for('login') }}">Login</a>
+        <a href="{{ url_for('register') }}">Register</a>
+    {% endif %}
+    <button id="themeToggle" class="theme-toggle" title="Toggle dark mode">🌙</button>
+</div>
     </nav>
 
     <div class="container">

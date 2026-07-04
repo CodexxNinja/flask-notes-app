@@ -4,6 +4,17 @@ from models import db, User
 from dotenv import load_dotenv
 import os
 from models import db, User, Note
+from textblob import TextBlob
+
+def analyze_sentiment(text):
+    polarity = TextBlob(text).sentiment.polarity
+    if polarity > 0.1:
+        return 'positive'
+    elif polarity < -0.1:
+        return 'negative'
+    else:
+        return 'neutral'
+
 load_dotenv()
 
 app = Flask(__name__)
@@ -74,7 +85,12 @@ def new_note():
     if request.method == 'POST':
         title = request.form['title']
         content = request.form['content']
-        note = Note(title=title, content=content, user_id=current_user.id)
+        note = Note(
+            title=title,
+            content=content,
+            sentiment=analyze_sentiment(content),
+            user_id=current_user.id
+        )
         db.session.add(note)
         db.session.commit()
         flash('Note created!', 'success')
@@ -92,6 +108,7 @@ def edit_note(note_id):
     if request.method == 'POST':
         note.title = request.form['title']
         note.content = request.form['content']
+        note.sentiment = analyze_sentiment(note.content)
         db.session.commit()
         flash('Note updated!', 'success')
         return redirect(url_for('dashboard'))
@@ -121,4 +138,5 @@ def logout():
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)

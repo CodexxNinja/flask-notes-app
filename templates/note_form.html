@@ -6,7 +6,11 @@
     <h2>{{ 'Edit Note' if note else 'New Note' }}</h2>
     <form method="POST">
         <input type="text" name="title" placeholder="Title" value="{{ note.title if note else '' }}" required>
-        <textarea name="content" placeholder="Write your note..." rows="8" required>{{ note.content if note else '' }}</textarea>
+        <textarea id="noteContent" name="content" placeholder="Write your note..." rows="8" required>{{ note.content if note else '' }}</textarea>
+        <div class="counter-row">
+            <span id="wordCount">0 words</span>
+            <span id="charCount">0 characters</span>
+        </div>
         <button type="submit">{{ 'Update' if note else 'Save' }}</button>
     </form>
     <p><a href="{{ url_for('dashboard') }}">← Back to Dashboard</a></p>

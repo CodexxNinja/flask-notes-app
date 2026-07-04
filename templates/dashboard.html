@@ -12,6 +12,11 @@
         {% for note in notes %}
         <div class="note-card">
             <h3>{{ note.title }}</h3>
+            <span class="sentiment-badge sentiment-{{ note.sentiment }}">
+            {% if note.sentiment == 'positive' %}😊 Positive
+            {% elif note.sentiment == 'negative' %}😞 Negative
+            {% else %}😐 Neutral
+            {% endif %}</span>
             <p>{{ note.content[:100] }}{% if note.content|length > 100 %}...{% endif %}</p>
             <span class="note-date">{{ note.created_at.strftime('%d %b %Y') }}</span>
             <div class="note-actions">
