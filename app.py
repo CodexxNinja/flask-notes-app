@@ -3,7 +3,7 @@ from flask_login import LoginManager, login_user, login_required, logout_user, c
 from models import db, User
 from dotenv import load_dotenv
 import os
-
+from models import db, User, Note
 load_dotenv()
 
 app = Flask(__name__)
@@ -22,7 +22,9 @@ def load_user(user_id):
 
 @app.route('/')
 def home():
-    return render_template('dashboard.html') if current_user.is_authenticated else redirect(url_for('login'))
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard'))
+    return redirect(url_for('login'))
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -63,7 +65,51 @@ def login():
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    return render_template('dashboard.html')
+    notes = Note.query.filter_by(user_id=current_user.id).order_by(Note.created_at.desc()).all()
+    return render_template('dashboard.html', notes=notes)
+
+@app.route('/note/new', methods=['GET', 'POST'])
+@login_required
+def new_note():
+    if request.method == 'POST':
+        title = request.form['title']
+        content = request.form['content']
+        note = Note(title=title, content=content, user_id=current_user.id)
+        db.session.add(note)
+        db.session.commit()
+        flash('Note created!', 'success')
+        return redirect(url_for('dashboard'))
+    return render_template('note_form.html', note=None)
+
+@app.route('/note/<int:note_id>/edit', methods=['GET', 'POST'])
+@login_required
+def edit_note(note_id):
+    note = Note.query.get_or_404(note_id)
+    if note.user_id != current_user.id:
+        flash("You don't have permission to edit this note.", 'error')
+        return redirect(url_for('dashboard'))
+
+    if request.method == 'POST':
+        note.title = request.form['title']
+        note.content = request.form['content']
+        db.session.commit()
+        flash('Note updated!', 'success')
+        return redirect(url_for('dashboard'))
+
+    return render_template('note_form.html', note=note)
+
+@app.route('/note/<int:note_id>/delete', methods=['POST'])
+@login_required
+def delete_note(note_id):
+    note = Note.query.get_or_404(note_id)
+    if note.user_id != current_user.id:
+        flash("You don't have permission to delete this note.", 'error')
+        return redirect(url_for('dashboard'))
+
+    db.session.delete(note)
+    db.session.commit()
+    flash('Note deleted.', 'success')
+    return redirect(url_for('dashboard'))
 
 @app.route('/logout')
 @login_required

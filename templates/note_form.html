@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit Note' if note else 'New Note' }}{% endblock %}
+{% block content %}
+
+<div class="form-box">
+    <h2>{{ 'Edit Note' if note else 'New Note' }}</h2>
+    <form method="POST">
+        <input type="text" name="title" placeholder="Title" value="{{ note.title if note else '' }}" required>
+        <textarea name="content" placeholder="Write your note..." rows="8" required>{{ note.content if note else '' }}</textarea>
+        <button type="submit">{{ 'Update' if note else 'Save' }}</button>
+    </form>
+    <p><a href="{{ url_for('dashboard') }}">← Back to Dashboard</a></p>
+</div>
+
+{% endblock %}

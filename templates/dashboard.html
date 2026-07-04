@@ -1,6 +1,30 @@
 {% extends "base.html" %}
 {% block title %}Dashboard{% endblock %}
 {% block content %}
-<h2>Welcome, {{ current_user.username }} 👋</h2>
-<p>Your notes will appear here soon.</p>
+
+<div class="dashboard-header">
+    <h2>Your Notes</h2>
+    <a href="{{ url_for('new_note') }}" class="btn-primary">+ New Note</a>
+</div>
+
+{% if notes %}
+    <div class="notes-grid">
+        {% for note in notes %}
+        <div class="note-card">
+            <h3>{{ note.title }}</h3>
+            <p>{{ note.content[:100] }}{% if note.content|length > 100 %}...{% endif %}</p>
+            <span class="note-date">{{ note.created_at.strftime('%d %b %Y') }}</span>
+            <div class="note-actions">
+                <a href="{{ url_for('edit_note', note_id=note.id) }}">Edit</a>
+                <form method="POST" action="{{ url_for('delete_note', note_id=note.id) }}" style="display:inline;" onsubmit="return confirm('Delete this note?');">
+                    <button type="submit" class="btn-delete">Delete</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p class="empty-state">No notes yet. Click "New Note" to create your first one.</p>
+{% endif %}
+
 {% endblock %}
