@@ -1,141 +1,62 @@
-# 📝 Flask Notes App
+# Flask Notes App
 
-A full-stack notes-taking web application built with **Flask**, featuring secure user authentication, complete CRUD functionality, an AI-powered sentiment analyzer, dark mode, and a clean, modern UI.
+### *A Full-Stack Note-Taking Web Application with Integrated Sentiment Analysis*
 
-This was built as **Week 1** of my personal Python → Flask → AI/ML project roadmap, where I'm building and shipping one project per week.
-
----
-
-## 🚀 Live Demo
-
-🔗 [Live App](#) *(link will be added after deployment)*
+[![Live App](https://img.shields.io/badge/Live_Demo-Online-brightgreen?style=for-the-badge)](https://flask-notes-app-d3gn.onrender.com)
+[![Python](https://img.shields.io/badge/Python-3.10+-blue?style=for-the-badge)](https://www.python.org)
+[![Flask](https://img.shields.io/badge/Flask-Framework-black?style=for-the-badge)](https://flask.palletsprojects.com)
 
 ---
 
-## ✨ Features
+## Project Description
 
-- 🔐 **User Authentication** — Secure register/login/logout system with hashed passwords (no plain-text passwords ever stored)
-- 📝 **Full CRUD for Notes** — Create, read, update, and delete personal notes
-- 🤖 **AI Sentiment Detection** — Each note is automatically analyzed and tagged as 😊 Positive, 😐 Neutral, or 😞 Negative using NLP (TextBlob)
-- 🌗 **Dark Mode** — Toggle between light and dark themes, saved across visits
-- 🔢 **Live Word/Character Counter** — Real-time count while writing a note
-- 🔒 **User-specific Data** — Every user can only see and manage their own notes
-- 💬 **Flash Messages** — Instant feedback for actions (login success, errors, note saved, etc.)
-- 📱 **Responsive UI** — Clean, card-based design that works on desktop and mobile
+The **Flask Notes App** is a secure, full-stack web application designed to streamline personal note management while introducing intelligent content insights. Built using a modern, lightweight backend architecture, it delivers complete CRUD functionality, robust user data isolation, and real-time interface enhancements like an asynchronous dark mode engine and live metrics tracking.
+
+The core distinguishing feature is an integrated Natural Language Processing (NLP) pipeline that dynamically evaluates the emotional undertone of user entries, automatically categorizing and tagging each note based on its underlying sentiment.
+
+> **Roadmap Context:** This project was developed during **Week 1** of a dedicated Python -> Flask -> AI/ML engineering roadmap, focusing on mastering stateful web applications and foundational NLP integration before transitioning to heavy machine learning pipelines.
 
 ---
 
-## 🛠️ Tech Stack
+## Key Features
 
-| Layer | Technology |
-|---|---|
-| Backend | Python, Flask |
-| Database | SQLite + Flask-SQLAlchemy (ORM) |
-| Authentication | Flask-Login, Werkzeug password hashing |
-| AI/NLP | TextBlob (sentiment analysis) |
-| Frontend | HTML5, CSS3, Vanilla JavaScript |
-| Templating | Jinja2 |
+*   **Secure Authentication Engine** — End-to-end registration, login, and session management powered by cryptographic password hashing to ensure no plain-text credentials touch the database.
+*   **Isolated Data Architecture** — Enforced user-specific data isolation layer using relational foreign keys; users strictly read and mutate their own data records.
+*   **Algorithmic Sentiment Analysis** — Automated textual analysis utilizing TextBlob NLP to evaluate note content and apply real-time sentiment classifications: Positive, Neutral, or Negative.
+*   **Persistent Theme Engine** — A hardware-accelerated dark/light mode toggle with state persistence handled seamlessly via client-side local storage.
+*   **Reactive UI Components** — High-performance, vanilla JavaScript live word and character counters that calculate input metrics instantly without triggering page reloads.
+*   **Asynchronous Feedback System** — UI micro-interactions featuring contextual flash alert notifications for instant system feedback (e.g., cryptographic verification, CRUD success).
 
 ---
 
-## 📸 Screenshots
+## Tech Stack
 
-*(Add 2–3 screenshots here — login page, dashboard with notes, dark mode. This section matters a lot for recruiters skimming your repo.)*
-
-```
-![Dashboard](screenshots/dashboard.png)
-![Dark Mode](screenshots/darkmode.png)
-```
-
----
-
-## ⚙️ How It Works (Quick Overview)
-
-1. A user **registers** an account — their password is hashed before being stored, never saved as plain text.
-2. After **logging in**, the session is managed securely using Flask-Login.
-3. On the **dashboard**, users can create new notes. Each note's text is passed through a sentiment analysis function that scores it and labels it Positive, Negative, or Neutral.
-4. Notes are stored in a SQLite database, linked to the specific user who created them — so no one can see or edit another user's notes.
-5. Users can **edit or delete** any of their own notes at any time.
-6. A **dark mode toggle** in the navbar lets users switch themes, and their choice is remembered using the browser's local storage.
+| Layer | Technologies & Libraries |
+| :--- | :--- |
+| **Backend Core** | Python, Flask |
+| **Database & ORM** | SQLite, Flask-SQLAlchemy |
+| **Security & Auth** | Flask-Login, Werkzeug Security (PBKDF2) |
+| **Natural Language Processing** | TextBlob |
+| **Frontend Architecture** | HTML5, CSS3 (Flexbox/Grid), Vanilla JavaScript |
+| **Templating Engine** | Jinja2 |
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
-```
+```text
 flask-notes-app/
-├── app.py                 # Main Flask app: routes & logic
-├── models.py               # Database models (User, Note)
-├── requirements.txt         # Python dependencies
-├── .env                     # Secret key (not committed to GitHub)
+├── app.py                  # Application entry point & routing architecture
+├── models.py               # Relational database schemas (User 1->N Note)
+├── requirements.txt        # Deterministic project dependencies
+├── .env                    # Local environment variables (git-ignored)
 ├── .gitignore
 ├── static/
-│   ├── css/style.css        # Styling (light/dark themes, layout)
-│   └── js/script.js         # Dark mode, word counter logic
+│   ├── css/style.css       # Scoped stylesheets & dynamic theme properties
+│   └── js/script.js        # Client-side reactivity & persistence logic
 └── templates/
-    ├── base.html            # Shared layout (navbar, flash messages)
-    ├── login.html
+    ├── base.html           # Master layout blueprint & alert layout
+    ├── login.html          # Authentication portals
     ├── register.html
-    ├── dashboard.html
-    └── note_form.html       # Used for both creating & editing notes
-```
-
----
-
-## 💻 Running This Project Locally
-
-### 1. Clone the repository
-```bash
-git clone https://github.com/CodexxNinja/flask-notes-app.git
-cd flask-notes-app
-```
-
-### 2. Create a virtual environment
-```bash
-python -m venv venv
-venv\Scripts\activate      # Windows
-source venv/bin/activate   # Mac/Linux
-```
-
-### 3. Install dependencies
-```bash
-pip install -r requirements.txt
-```
-
-### 4. Set up environment variables
-Create a `.env` file in the root folder:
-```
-SECRET_KEY=your-own-random-secret-key
-```
-Generate one with:
-```bash
-python -c "import secrets; print(secrets.token_hex(32))"
-```
-
-### 5. Run the app
-```bash
-python app.py
-```
-Visit `http://127.0.0.1:5000` in your browser.
-
----
-
-## 🧠 What I Learned Building This
-
-- Structuring a Flask app with proper routes, templates, and blueprints of logic
-- Implementing secure authentication from scratch (hashing, sessions, protected routes)
-- Designing a relational database schema with foreign keys (User → Notes)
-- Integrating a lightweight NLP library into a web app for real functionality, not just a demo
-- Writing UI logic in vanilla JavaScript (dark mode persistence, live counters) without any frontend framework
-
----
-
-## 🗺️ What's Next
-
-This is Week 1 of a 14-week roadmap covering Flask, APIs, Pandas, Numpy, Matplotlib, Seaborn, Scikit-learn, ML pipelines, and deployed AI/ML web apps. Follow along on my GitHub for upcoming projects.
-
----
-
-## 📄 License
-
-This project is open source and available for anyone to learn from.
+    ├── dashboard.html      # Protected user console
+    └── note_form.html      # Polymorphic creation/editing interface
