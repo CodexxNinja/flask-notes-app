@@ -14,8 +14,6 @@ The **Flask Notes App** is a secure, full-stack **web application** designed to 
 
 The core distinguishing feature is an integrated Natural Language Processing (NLP) pipeline that dynamically evaluates the emotional undertone of user entries, automatically categorizing and tagging each note based on its underlying sentiment.
 
-> **Roadmap Context:** This project was developed during **Week 1** of a dedicated Python -> Flask -> AI/ML engineering roadmap, focusing on mastering stateful web applications and foundational NLP integration before transitioning to heavy machine learning pipelines.
-
 ---
 
 ## Key Features
