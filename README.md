@@ -10,7 +10,7 @@
 
 ## Project Description
 
-The **Flask Notes App** is a secure, full-stack **web application** designed to streamline **personal note management** while introducing intelligent content insights. Built using a modern, lightweight backend architecture, it delivers complete **CRUD functionality**, robust user data isolation, and real-time interface enhancements like an asynchronous dark mode engine and live metrics trackings.
+The **Flask Notes App** is a secure, full-stack **web application** designed to streamline **personal note management** while introducing intelligent content insights. Built using a modern, lightweight backend architecture, it delivers complete **CRUD functionality**, robust user data isolation, and real-time interface enhancements like an asynchronous dark mode engine and live metrics tracking.
 
 The core distinguishing feature is an integrated Natural Language Processing (NLP) pipeline that dynamically evaluates the emotional undertone of user entries, automatically categorizing and tagging each note based on its underlying sentiment.
 
